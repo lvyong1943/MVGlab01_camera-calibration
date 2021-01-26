@@ -51,9 +51,18 @@ class SingleCamera:
     # to compose P in right form s.t. we can get Pm=0
     def composeP(self):
         i = 0
-        P = np.empty([self.__point_num, 12], dtype=float)
+        #P = np.empty([self.__point_num, 12], dtype=float)
+        P = np.empty([self.__point_num*2, 12], dtype=float)
         # print(P.shape)
         while i < self.__point_num:
+            c=i
+            p1 = self.__world_coor[c]
+            p2 = np.array([0, 0, 0, 0])
+            p3 = -p1 * self.__pixel_coor[c][0]
+            P[i*2] = np.hstack((p1, p2, p3))
+            p3 = -p1 * self.__pixel_coor[c][1]
+            P[i*2+1] = np.hstack((p2, p1, p3))
+            '''
             c = i // 2
             p1 = self.__world_coor[c]
             p2 = np.array([0, 0, 0, 0])
@@ -66,6 +75,7 @@ class SingleCamera:
                 p3 = -p1 * self.__pixel_coor[c][1]
                 #print(p3)
                 P[i] = np.hstack((p2, p1, p3))
+            '''
             # M = P[i]
             # print(M)
             i = i + 1
